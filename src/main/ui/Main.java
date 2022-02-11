@@ -9,8 +9,6 @@ import java.util.Scanner;
 
 public class Main {
     private Foundation ubcFoundation;
-    private Charity charity;
-    private Grant grant;
     private Scanner scanner;
 
     // EFFECTS: constructs a foundation and starts process operations for the application
@@ -57,13 +55,14 @@ public class Main {
                 break;
             }
         }
-
         System.out.println("Thank you for using the Grant Tracking Application");
     }
 
     // MODIFIES: this
     // EFFECTS: interface for constructing a new charity
     private void addCharity() {
+        Charity charity;
+        scanner = new Scanner(System.in);
         System.out.println("Enter the name of the charity");
         String charityName = scanner.nextLine();
         charity = new Charity(charityName);
@@ -76,6 +75,8 @@ public class Main {
     // EFFECTS: interface for constructing a new grant
     //          if no charities have been created prompts user to first create one before creating a grant
     private void addGrant() {
+        Grant grant;
+        scanner = new Scanner(System.in);
         if (ubcFoundation.getCharityList().isEmpty()) {
             System.out.println("Add a charity before you add any grants");
         } else if (!ubcFoundation.getCharityList().isEmpty()) {
@@ -101,8 +102,8 @@ public class Main {
     //          if the charity does not exist in the database, prompts user to select a new charity
     private void assignGrant(Grant grant) {
         System.out.println("Enter a charity to assign the grant to from the following list:");
-        listAllCharities();
         scanner = new Scanner(System.in);
+        listAllCharities();
         String charityName = scanner.nextLine();
         String notFound = "not found";
 
@@ -113,7 +114,7 @@ public class Main {
             }
         }
         if (notFound.equals("not found")) {
-            System.out.println("The charity " + charityName + " is not the database");
+            System.out.println("The charity " + charityName + " is not in the database");
             assignGrant(grant);
         }
     }
@@ -125,7 +126,6 @@ public class Main {
     //          - return back to main menu
     private void reviewCharity() {
         String operation;
-        scanner = new Scanner(System.in);
 
         while (true) {
             System.out.println("Select the task you would like to complete");
@@ -149,24 +149,26 @@ public class Main {
             }
 
             if (operation.equals("Return")) {
-                processOperations();
+                break;
             }
         }
     }
 
     // EFFECTS: displays total amount of funding for a given charity
     private void totalFunded() {
+        scanner = new Scanner(System.in);
         System.out.println("Enter the name of charity you want to review total funds received");
         String charityName = scanner.nextLine();
         for (Charity charity : ubcFoundation.getCharityList()) {
             if (charity.getName().equals(charityName)) {
-                System.out.println("Total funds give to " + charityName + "is " + charity.totalFunded());
+                System.out.println("Total funds granted to " + charityName + " is $" + charity.totalFunded());
             }
         }
     }
 
     // EFFECTS: displays the largest grant received by a given charity
     private void largestGrant() {
+        scanner = new Scanner(System.in);
         System.out.println("Enter the name of charity you want to review total funds received");
         String charityName = scanner.nextLine();
         for (Charity charity : ubcFoundation.getCharityList()) {
@@ -179,6 +181,7 @@ public class Main {
 
     // EFFECTS: lists all "Awarded" grants received by a given charity
     private void listGrants() {
+        scanner = new Scanner(System.in);
         System.out.println("Enter the name of charity you see a list of grants");
         String charityName = scanner.nextLine();
         for (Charity charity1 : ubcFoundation.getCharityList()) {
@@ -190,32 +193,32 @@ public class Main {
 
     // EFFECTS: prints secondary menu to review information about the foundation including:
     //          - a list of all charities & the total amount of funding received
+    //          - add funds to the foundation
     //          - return to the main menu
     private void reviewFoundation() {
-        String operation;
-        scanner = new Scanner(System.in);
+        String operations;
 
         while (true) {
             System.out.println("Select the task you would like to complete");
             System.out.println("Type 'View charities' to see a list of all "
                     + "charities in the database with total funded to organization");
             System.out.println("Type 'Return' to return to main menu");
-            operation = scanner.nextLine();
-            System.out.println("you selected " + operation);
+            operations = scanner.nextLine();
+            System.out.println("you selected " + operations);
 
-            if (operation.equals("View charities")) {
+            if (operations.equals("View charities")) {
                 listAllCharities();
             }
 
-            if (operation.equals("Return")) {
-                processOperations();
+            if (operations.equals("Return")) {
+                break;
             }
-
         }
     }
 
     // EFFECTS: list of all charities & the total amount of funding received
     private void listAllCharities() {
+        scanner = new Scanner(System.in);
         ArrayList<String> charities = new ArrayList<>();
         for (Charity charity : ubcFoundation.getCharityList()) {
             charities.add(charity.getName() + " has received $" + charity.totalFunded());
