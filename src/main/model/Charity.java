@@ -9,51 +9,43 @@ import java.util.List;
 public class Charity {
 
     private String name;
-    private List<Grant> grants;
+    protected List<Grant> grants;
 
-    // REQUIRES:
-    // MODIFIES:
     // EFFECTS: constructs an organization with a given name
     //          and without any associated grants
     public Charity(String name) {
         this.name = name;
         grants = new ArrayList<>();
-
     }
 
-    // REQUIRES:
-    // MODIFIES:
+    // MODIFIES: this
     // EFFECTS: adds a grant to an applying organization
-    public static void addGrant(Grant grant, Charity charity) {
-        charity.grants.add(grant);
+    public void addGrant(Grant grant) {
+        grants.add(grant);
 
     }
 
-    // REQUIRES:
-    // MODIFIES:
     // EFFECTS: produces the total amount of funds awarded to a given charity
-    public int totalFunded(Charity charity) {
+    public int totalFunded() {
         int result = 0;
-        if (charity.grants.isEmpty()) {
+        if (grants.isEmpty()) {
             return 0;
         } else {
-            for (Grant grants : charity.grants) {
+            for (Grant grants : grants) {
                 result += grants.getAmountGranted();
             }
         }
         return result;
     }
 
-    // REQUIRES:
-    // MODIFIES:
     // EFFECTS: looks through list of grants from organization and displays
     //          largest grant
-    public int largestGrantReceived(Charity charity) {
+    public int largestGrantReceived() {
         int max = 0;
-        if (charity.grants.isEmpty()) {
+        if (grants.isEmpty()) {
             return 0;
         } else {
-            for (Grant grants : charity.grants) {
+            for (Grant grants : grants) {
                 if (grants.getAmountGranted() > max) {
                     max = grants.getAmountGranted();
                 }
@@ -62,14 +54,12 @@ public class Charity {
         return max;
     }
 
-    // REQUIRES:
-    // MODIFIES:
-    // EFFECTS: displays only grant that have been awarded
-    public ArrayList<Grant> listAwardedGrants(Charity charity) {
-        ArrayList<Grant> awardedGrants = new ArrayList<>();
-        for (Grant grants : charity.grants) {
+    // EFFECTS: displays a list of grants that have been awarded
+    public ArrayList<String> listAwardedGrants() {
+        ArrayList<String> awardedGrants = new ArrayList<>();
+        for (Grant grants : grants) {
             if (grants.getStatus().equals("Awarded")) {
-                awardedGrants.add(grants);
+                awardedGrants.add(grants.getGrantName());
             }
         }
         return awardedGrants;
