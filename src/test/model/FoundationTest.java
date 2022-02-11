@@ -12,7 +12,6 @@ public class FoundationTest {
 
     private Foundation foundation;
     private Charity charity1;
-    private Charity charity2;
     private Charity charity3;
     List<Charity> expectedCharity;
 
@@ -20,7 +19,6 @@ public class FoundationTest {
     void runBefore() {
         foundation = new Foundation();
         charity1 = new Charity("Micah House");
-        charity2 = new Charity("Indwell");
         charity3 = new Charity("Rising Angels");
         expectedCharity = new ArrayList<>();
     }
@@ -41,17 +39,6 @@ public class FoundationTest {
         assertEquals(expectedCharity, foundation.getCharityList());
         foundation.addCharity(charity3);
         expectedCharity.add(charity3);
-        assertEquals(expectedCharity, foundation.getCharityList());
-    }
-
-    @Test
-    void removeCharityTest() {
-        assertEquals(expectedCharity, foundation.getCharityList());
-        foundation.addCharity(charity2);
-        expectedCharity.add(charity2);
-        assertEquals(expectedCharity, foundation.getCharityList());
-        foundation.removeCharity(charity2);
-        expectedCharity.remove(charity2);
         assertEquals(expectedCharity, foundation.getCharityList());
     }
 

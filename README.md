@@ -14,5 +14,6 @@ process and use similar software in my work.
  - As a user, I want to be able to pull all grants awarded to every organization
  - As a user, I want to be able to see the largest gift from an organization
  - As a user, I want to see the total amount given to an organization
+ - As a user, I want to add funds to the foundation to grant
 
 

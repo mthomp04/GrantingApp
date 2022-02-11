@@ -4,7 +4,6 @@ import model.Charity;
 import model.Foundation;
 import model.Grant;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -103,7 +102,7 @@ public class Main {
     private void assignGrant(Grant grant) {
         System.out.println("Enter a charity to assign the grant to from the following list:");
         scanner = new Scanner(System.in);
-        listAllCharities();
+        System.out.println(ubcFoundation.listOfCharitiesAndAmountFunded());
         String charityName = scanner.nextLine();
         String notFound = "not found";
 
@@ -199,15 +198,21 @@ public class Main {
         String operations;
 
         while (true) {
+            scanner = new Scanner(System.in);
             System.out.println("Select the task you would like to complete");
             System.out.println("Type 'View charities' to see a list of all "
                     + "charities in the database with total funded to organization");
+            System.out.println("Type 'Add funds' to add more funds available to your foundation to grant");
             System.out.println("Type 'Return' to return to main menu");
             operations = scanner.nextLine();
             System.out.println("you selected " + operations);
 
             if (operations.equals("View charities")) {
-                listAllCharities();
+                System.out.println(ubcFoundation.listOfCharitiesAndAmountFunded());
+            }
+
+            if (operations.equals("Add funds")) {
+                adjustFunds();
             }
 
             if (operations.equals("Return")) {
@@ -216,14 +221,15 @@ public class Main {
         }
     }
 
-    // EFFECTS: list of all charities & the total amount of funding received
-    private void listAllCharities() {
+    // EFFECTS: updates total amount of funds available for the organization to grant
+    private void adjustFunds() {
         scanner = new Scanner(System.in);
-        ArrayList<String> charities = new ArrayList<>();
-        for (Charity charity : ubcFoundation.getCharityList()) {
-            charities.add(charity.getName() + " has received $" + charity.totalFunded());
-        }
-        System.out.println(charities);
+        int funds;
+        System.out.println("Enter amount of funds you want to add or remove");
+        funds = scanner.nextInt();
+        ubcFoundation.addOrRemoveFunds(funds);
+        System.out.println("$" + funds + " has been add to the foundation");
+        System.out.println("$" + ubcFoundation.getFundsAvailable() + " is now available to grant");
     }
 
     public static void main(String[] args) {
