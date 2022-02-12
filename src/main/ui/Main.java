@@ -15,6 +15,9 @@ public class Main {
         System.out.println("Welcome to the Grant Tracking Application");
         System.out.println("Our goal is to assist you in managing your funding distribution");
         ubcFoundation = new Foundation();
+        System.out.println("To begin, start by adding funds to your foundation so you can begin to distribute grants");
+        adjustFunds();
+
         processOperations();
     }
 
@@ -89,12 +92,13 @@ public class Main {
             System.out.println("Enter the status of the grant (Awarded or Rejected)");
             String grantStatus = scanner.nextLine();
 
-            System.out.println("Enter the amount of funding approved for the grant");
+            System.out.println("Enter the amount of funding requested in the grant");
             int amountFunded = scanner.nextInt();
 
             if (grantStatus.equals("Awarded") && ubcFoundation.getFundsAvailable() - amountFunded < 0) {
-                scanner = new Scanner(System.in);
                 System.out.println("Insufficient funds. Please add funding before you add grants");
+                adjustFunds();
+                scanner = new Scanner(System.in);
             } else {
                 grant = new Grant(grantName, grantStatus, amountFunded);
                 System.out.println("This is your grant: " + grantName + " " + grantStatus + " " + "$" + amountFunded);
@@ -197,7 +201,7 @@ public class Main {
     // EFFECTS: lists all "Awarded" grants received by a given charity
     private void listGrants() {
         scanner = new Scanner(System.in);
-        System.out.println("Enter the name of charity you see a list of grants received");
+        System.out.println("Enter the name of charity you want see a list of all awarded grants received");
         String charityName = scanner.nextLine();
         for (Charity charity1 : ubcFoundation.getCharityList()) {
             if (charity1.getName().equals(charityName)) {
