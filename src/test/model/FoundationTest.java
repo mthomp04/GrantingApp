@@ -43,6 +43,18 @@ public class FoundationTest {
     }
 
     @Test
+    void addGrantTest() {
+        Grant grant = new Grant("Micah House", "Awarded", 40);
+        Grant grant2 = new Grant("Indwell", "Rejected", 100);
+        assertEquals(0, foundation.getFundsAvailable());
+        foundation.addOrRemoveFunds(100);
+        foundation.addGrant(grant);
+        assertEquals(60, foundation.getFundsAvailable());
+        foundation.addGrant(grant2);
+        assertEquals(60, foundation.getFundsAvailable());
+    }
+
+    @Test
     void addOrRemoveFundsTest() {
         assertEquals(0, foundation.getFundsAvailable());
         foundation.addOrRemoveFunds(50000);

@@ -73,6 +73,9 @@ public class Main {
     // MODIFIES: this
     // EFFECTS: interface for constructing a new grant
     //          if no charities have been created prompts user to first create one before creating a grant
+    //          if there are not enough funds in the foundation prompts user to add funds
+    //          otherwise greats new grant with name, status, and amount
+    //          allocates grant to a given charity and removes funds of grant from total foundation's funds
     private void addGrant() {
         Grant grant;
         scanner = new Scanner(System.in);
@@ -89,10 +92,15 @@ public class Main {
             System.out.println("Enter the amount of funding approved for the grant");
             int amountFunded = scanner.nextInt();
 
-            grant = new Grant(grantName, grantStatus, amountFunded);
-            System.out.println("This is your grant: " + grantName + " " + grantStatus + " " + "$" + amountFunded);
-
-            assignGrant(grant);
+            if (grantStatus.equals("Awarded") && ubcFoundation.getFundsAvailable() - amountFunded < 0) {
+                scanner = new Scanner(System.in);
+                System.out.println("Insufficient funds. Please add funding before you add grants");
+            } else {
+                grant = new Grant(grantName, grantStatus, amountFunded);
+                System.out.println("This is your grant: " + grantName + " " + grantStatus + " " + "$" + amountFunded);
+                assignGrant(grant);
+                removeFunds(grant);
+            }
         }
     }
 
@@ -118,11 +126,19 @@ public class Main {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: removes grant funds from total amount funds in the foundation
+    private void removeFunds(Grant grant) {
+        scanner = new Scanner(System.in);
+        ubcFoundation.addGrant(grant);
+        System.out.println("There is $" + ubcFoundation.getFundsAvailable() + " available to grant");
+    }
+
     // EFFECTS: prints a secondary menu for users to pull pre-defined reports about grants including:
     //          - total amount of funding received by a specified charity
-    //          - largest grant received by a specified charity
+    //          - the largest grant received by a specified charity
     //          - a list of all grants awarded for a specified charity
-    //          - return back to main menu
+    //          - returns user back to main menu
     private void reviewCharity() {
         String operation;
 
@@ -156,7 +172,7 @@ public class Main {
     // EFFECTS: displays total amount of funding for a given charity
     private void totalFunded() {
         scanner = new Scanner(System.in);
-        System.out.println("Enter the name of charity you want to review total funds received");
+        System.out.println("Enter the name of the charity you want to review total funds received");
         String charityName = scanner.nextLine();
         for (Charity charity : ubcFoundation.getCharityList()) {
             if (charity.getName().equals(charityName)) {
@@ -168,7 +184,7 @@ public class Main {
     // EFFECTS: displays the largest grant received by a given charity
     private void largestGrant() {
         scanner = new Scanner(System.in);
-        System.out.println("Enter the name of charity you want to review total funds received");
+        System.out.println("Enter the name of the charity you want to review the largest grant received");
         String charityName = scanner.nextLine();
         for (Charity charity : ubcFoundation.getCharityList()) {
             if (charity.getName().equals(charityName)) {
@@ -181,7 +197,7 @@ public class Main {
     // EFFECTS: lists all "Awarded" grants received by a given charity
     private void listGrants() {
         scanner = new Scanner(System.in);
-        System.out.println("Enter the name of charity you see a list of grants");
+        System.out.println("Enter the name of charity you see a list of grants received");
         String charityName = scanner.nextLine();
         for (Charity charity1 : ubcFoundation.getCharityList()) {
             if (charity1.getName().equals(charityName)) {
