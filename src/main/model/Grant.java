@@ -1,8 +1,7 @@
 package model;
 
+// represents a grant proposal
 public class Grant {
-
-    // Represents a grant proposal
 
     private String grantName;
     private String status;

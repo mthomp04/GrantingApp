@@ -3,8 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-
-// Represents an organization that has applied for funding
+// represents an organization that has applied for funding
 // and has a name and list of grants applied for
 public class Charity {
 
