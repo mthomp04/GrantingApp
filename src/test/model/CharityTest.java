@@ -24,9 +24,9 @@ public class CharityTest {
         testCharity2 = new Charity("Indwell");
         testCharity3 = new Charity("Yonge Street Mission");
         expected = new ArrayList<>();
-        grant1 = new Grant("New Shelter", "Awarded", 10000);
-        grant2 = new Grant("Employment Program", "Rejected", 0);
-        grant3 = new Grant("Anti-Human Trafficking", "Awarded", 50000);
+        grant1 = new Grant("New Shelter", Grant.Status.AWARDED, 10000);
+        grant2 = new Grant("Employment Program", Grant.Status.REJECTED, 0);
+        grant3 = new Grant("Anti-Human Trafficking", Grant.Status.AWARDED, 50000);
         testCharity3.addGrant(grant1);
         testCharity3.addGrant(grant2);
         testCharity3.addGrant(grant3);
@@ -63,7 +63,6 @@ public class CharityTest {
         testCharity.addGrant(grant2);
         testCharity.addGrant(grant3);
         assertEquals(60000, testCharity.totalFunded());
-
     }
 
     @Test
@@ -74,7 +73,6 @@ public class CharityTest {
         testCharity.addGrant(grant3);
         assertEquals(50000, testCharity.largestGrantReceived());
         assertEquals(0, testCharity2.largestGrantReceived());
-
     }
 
     @Test
@@ -84,6 +82,23 @@ public class CharityTest {
         expected.add(grant3.getGrantName());
         assertEquals("List of grant applications :" + expected,
                      "List of grant applications :" + testCharity3.listAwardedGrants());
+    }
+
+    @Test
+    void removeGrantTest() {
+        testCharity.addGrant(grant1);
+        testCharity.addGrant(grant2);
+        testCharity.addGrant(grant3);
+        expected.add(grant1);
+        expected.add(grant2);
+        expected.add(grant3);
+        assertEquals(expected, testCharity.getGrants());
+        testCharity.removeGrant(grant1.getGrantName());
+        expected.remove(0);
+        assertEquals(expected, testCharity.getGrants());
+        testCharity.removeGrant(grant3.getGrantName());
+        expected.remove(1);
+        assertEquals(expected, testCharity.getGrants());
     }
 
 }

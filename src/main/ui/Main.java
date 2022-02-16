@@ -80,8 +80,13 @@ public class Main {
     //          otherwise greats new grant with name, status, and amount
     //          allocates grant to a given charity and removes funds of grant from total foundation's funds
     private void addGrant() {
+        @SuppressWarnings("methodlength")
         Grant grant;
+        Grant.Status grantStatus;
+        String grantStatusString;
+        int amountFunded;
         scanner = new Scanner(System.in);
+
         if (ubcFoundation.getCharityList().isEmpty()) {
             System.out.println("Add a charity before you add any grants");
         } else if (!ubcFoundation.getCharityList().isEmpty()) {
@@ -90,22 +95,58 @@ public class Main {
             String grantName = scanner.nextLine();
 
             System.out.println("Enter the status of the grant (Awarded or Rejected)");
-            String grantStatus = scanner.nextLine();
+            grantStatusString = scanner.nextLine();
+
+            while (!grantStatusString.equals("Awarded") && !grantStatusString.equals("Rejected")) {
+                System.out.println("Invalid entry");
+                System.out.println("Enter the status of the grant (Awarded or Rejected)");
+                grantStatusString = scanner.nextLine();
+            }
+            grantStatus = statusStringConverter(grantStatusString);
 
             System.out.println("Enter the amount of funding requested in the grant");
-            int amountFunded = scanner.nextInt();
-
-            if (grantStatus.equals("Awarded") && ubcFoundation.getFundsAvailable() - amountFunded < 0) {
-                System.out.println("Insufficient funds. Please add funding before you add grants");
-                adjustFunds();
+            while (!scanner.hasNextInt()) {
+                System.out.println("Invalid entry");
+                System.out.println("Enter the amount of funding requested in the grant");
                 scanner = new Scanner(System.in);
-            } else {
-                grant = new Grant(grantName, grantStatus, amountFunded);
-                System.out.println("This is your grant: " + grantName + " " + grantStatus + " " + "$" + amountFunded);
-                assignGrant(grant);
-                removeFunds(grant);
             }
+            amountFunded = scanner.nextInt();
+
+            while (grantStatus == Grant.Status.AWARDED && ubcFoundation.getFundsAvailable() - amountFunded < 0) {
+                String operations;
+                System.out.println("Insufficient funds. Please add funding before you add grants");
+                scanner = new Scanner(System.in);
+                System.out.println("Type 'Add funds' to add more funding or type 'Quit'");
+                operations = scanner.nextLine();
+
+                if (operations.equals("Add funds")) {
+                    adjustFunds();
+                }
+
+                if (operations.equals("Quit")) {
+                    processOperations();
+                    break;
+                }
+                scanner = new Scanner(System.in);
+            }
+
+            grant = new Grant(grantName, grantStatus, amountFunded);
+            System.out.println("This is your grant: " + grantName + " " + grantStatusString + " " + "$" + amountFunded);
+            assignGrant(grant);
+            removeFunds(grant);
         }
+    }
+
+    // MODIFIED: this
+    // EFFECTS: converts string into a status
+    private Grant.Status statusStringConverter(String status) {
+        Grant.Status grantStatus;
+        if (status.equals("Awarded")) {
+            grantStatus = Grant.Status.AWARDED;
+        } else {
+            grantStatus = Grant.Status.REJECTED;
+        }
+        return grantStatus;
     }
 
     // MODIFIES: Charity
@@ -200,14 +241,36 @@ public class Main {
 
     // EFFECTS: lists all "Awarded" grants received by a given charity
     private void listGrants() {
+        Charity passCharity = null;
         scanner = new Scanner(System.in);
-        System.out.println("Enter the name of charity you want see a list of all awarded grants received");
+        System.out.println("Enter the name of charity you want to see a list of all awarded grants received");
         String charityName = scanner.nextLine();
         for (Charity charity1 : ubcFoundation.getCharityList()) {
             if (charity1.getName().equals(charityName)) {
                 System.out.println(charity1.listAwardedGrants());
+                passCharity = charity1;
             }
         }
+        if (passCharity == null) {
+            System.out.println("Charity cannot be found");
+        } else {
+            System.out.println("Would you like to remove a grant from the list? (Yes or No)");
+            String operation = scanner.nextLine();
+            System.out.println("you selected " + operation);
+
+            if (operation.equals("Yes")) {
+                removeGrant(passCharity);
+            }
+        }
+    }
+
+    private void removeGrant(Charity passCharity) {
+        scanner = new Scanner(System.in);
+        System.out.println("Enter the name of a grant to remove it");
+        String grantName = scanner.nextLine();
+
+        passCharity.removeGrant(grantName);
+        System.out.println(grantName + " has been removed from ");
     }
 
     // EFFECTS: prints secondary menu to review information about the foundation including:
@@ -223,6 +286,7 @@ public class Main {
             System.out.println("Type 'View charities' to see a list of all "
                     + "charities in the database with total funded to organization");
             System.out.println("Type 'Add funds' to add more funds available to your foundation to grant");
+            System.out.println("Type 'View total funds' to view current balance of funds");
             System.out.println("Type 'Return' to return to main menu");
             operations = scanner.nextLine();
             System.out.println("you selected " + operations);
@@ -233,6 +297,10 @@ public class Main {
 
             if (operations.equals("Add funds")) {
                 adjustFunds();
+            }
+
+            if (operations.equals("View total funds")) {
+                System.out.println("There is $" + ubcFoundation.getFundsAvailable() + " available to grant");
             }
 
             if (operations.equals("Return")) {

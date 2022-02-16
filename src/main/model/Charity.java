@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 // represents an organization that has applied for funding
@@ -21,7 +22,6 @@ public class Charity {
     // EFFECTS: adds a grant to an applying organization
     public void addGrant(Grant grant) {
         grants.add(grant);
-
     }
 
     // EFFECTS: produces the total amount of funds awarded to a given charity
@@ -31,7 +31,9 @@ public class Charity {
             return 0;
         } else {
             for (Grant grants : grants) {
-                result += grants.getAmountGranted();
+                if (grants.getStatus().equals(Grant.Status.AWARDED)) {
+                    result += grants.getAmountGranted();
+                }
             }
         }
         return result;
@@ -57,11 +59,25 @@ public class Charity {
     public ArrayList<String> listAwardedGrants() {
         ArrayList<String> awardedGrants = new ArrayList<>();
         for (Grant grants : grants) {
-            if (grants.getStatus().equals("Awarded")) {
+            if (grants.getStatus().equals(Grant.Status.AWARDED)) {
                 awardedGrants.add(grants.getGrantName());
             }
         }
         return awardedGrants;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes a grant from the list of associated grant
+    public void removeGrant(String grantName) {
+        Iterator<Grant> itr = grants.iterator();
+
+        while (itr.hasNext()) {
+            Grant grant = itr.next();
+
+            if (grant.getGrantName().equals(grantName)) {
+                itr.remove();
+            }
+        }
     }
 
     public List<Grant> getGrants() {
@@ -71,6 +87,5 @@ public class Charity {
     public String getName() {
         return name;
     }
-
 
 }
