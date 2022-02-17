@@ -14,8 +14,9 @@ public class Main {
     public Main() {
         System.out.println("Welcome to the Grant Tracking Application");
         System.out.println("Our goal is to assist you in managing your funding distribution");
+        // System.out.println("Enter 'Load' to load existing foundation or 'New' to start a new one")
         ubcFoundation = new Foundation();
-        System.out.println("To begin, start by adding funds to your foundation so you can begin to distribute grants");
+        System.out.println("\nTo begin, start by adding funds to your foundation so you can begin to distribute grants");
         adjustFunds();
 
         processOperations();
@@ -32,8 +33,9 @@ public class Main {
         String operation;
         scanner = new Scanner(System.in);
 
+        //TODO add save option to main menu
         while (true) {
-            System.out.println("Please select an option (Add charity, Add grant, Reports, Review foundation, Quit)");
+            System.out.println("\nPlease select an option (Add charity, Add grant, Reports, Review foundation, Quit)");
             operation = scanner.nextLine();
             System.out.println("you selected " + operation);
 
@@ -52,6 +54,10 @@ public class Main {
             if (operation.equals("Review foundation")) {
                 reviewFoundation();
             }
+
+//            if (operation.equals("Save")) {
+//                saveFoundation();
+//            }
 
             if (operation.equals("Quit")) {
                 break;
