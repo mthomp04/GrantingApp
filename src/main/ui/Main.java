@@ -22,29 +22,8 @@ public class Main {
         System.out.println("Welcome to the Grant Tracking Application");
         System.out.println("Our goal is to assist you in managing your funding distribution");
         ubcFoundation = new Foundation();
-       // newOrLoad();
         processOperations();
     }
-
-//    private void newOrLoad() {
-//        String operation;
-//        scanner = new Scanner(System.in);
-//
-//        System.out.println("Press 'N' for new foundation or 'L' to load a previously saved foundation");
-//        operation = scanner.nextLine();
-//        System.out.println("you selected " + operation);
-//
-//        if (operation.equals("N")) {
-//            System.out.println("To begin, start by adding funds to"
-//                            + "your foundation so you can begin to distribute grants");
-//            adjustFunds();
-//        }
-//
-//        if (operation.equals("L")) {
-//            loadFoundation();
-//        }
-//
-//    }
 
     //EFFECTS: prints the main menu options for user to select from which include:
     //         - adding a charity to the foundation
@@ -54,6 +33,7 @@ public class Main {
     //         - save or load a file
     //         - quiting the application
 
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void processOperations() {
         @SuppressWarnings("methodlength")
         String operation;
@@ -63,7 +43,7 @@ public class Main {
 
         while (true) {
             System.out.println("Please select an option (Add charity, Add grant, Reports, "
-                   + "Review foundation, Save, Load, Quit)");
+                    + "Review foundation, Save, Load, Quit)");
             operation = scanner.nextLine();
             System.out.println("you selected " + operation);
 
@@ -117,6 +97,7 @@ public class Main {
     //          if there are not enough funds in the foundation prompts user to add funds
     //          otherwise greats new grant with name, status, and amount
     //          allocates grant to a given charity and removes funds of grant from total foundation's funds
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void addGrant() {
         @SuppressWarnings("methodlength")
         Grant grant;
@@ -302,6 +283,8 @@ public class Main {
         }
     }
 
+    // MODIFIES: charity
+    // EFFECTS: removes grant from a given charity
     private void removeGrant(Charity passCharity) {
         scanner = new Scanner(System.in);
         System.out.println("Enter the name of a grant to remove it");
@@ -315,6 +298,7 @@ public class Main {
     //          - a list of all charities & the total amount of funding received
     //          - add funds to the foundation
     //          - return to the main menu
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void reviewFoundation() {
         @SuppressWarnings("methodlength")
         String operations;
