@@ -22,11 +22,29 @@ public class Main {
         System.out.println("Welcome to the Grant Tracking Application");
         System.out.println("Our goal is to assist you in managing your funding distribution");
         ubcFoundation = new Foundation();
-        System.out.println("To begin, start by adding funds to your foundation so you can begin to distribute grants");
-        adjustFunds();
-
+       // newOrLoad();
         processOperations();
     }
+
+//    private void newOrLoad() {
+//        String operation;
+//        scanner = new Scanner(System.in);
+//
+//        System.out.println("Press 'N' for new foundation or 'L' to load a previously saved foundation");
+//        operation = scanner.nextLine();
+//        System.out.println("you selected " + operation);
+//
+//        if (operation.equals("N")) {
+//            System.out.println("To begin, start by adding funds to"
+//                            + "your foundation so you can begin to distribute grants");
+//            adjustFunds();
+//        }
+//
+//        if (operation.equals("L")) {
+//            loadFoundation();
+//        }
+//
+//    }
 
     //EFFECTS: prints the main menu options for user to select from which include:
     //         - adding a charity to the foundation
