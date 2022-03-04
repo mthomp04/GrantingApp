@@ -3,12 +3,19 @@ package ui;
 import model.Charity;
 import model.Foundation;
 import model.Grant;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
+    private static final String JSON_STORE = "./data/workroom.json";
     private Foundation ubcFoundation;
     private Scanner scanner;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECTS: constructs a foundation and starts process operations for the application
     public Main() {
@@ -26,14 +33,19 @@ public class Main {
     //         - adding and assigning a grant to a charity
     //         - pulling pre-defined reports of funds distributed
     //         - review information about the foundation
+    //         - save or load a file
     //         - quiting the application
+
     private void processOperations() {
         @SuppressWarnings("methodlength")
         String operation;
         scanner = new Scanner(System.in);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
 
         while (true) {
-            System.out.println("Please select an option (Add charity, Add grant, Reports, Review foundation, Quit)");
+            System.out.println("Please select an option (Add charity, Add grant, Reports, "
+                   + "Review foundation, Save, Load, Quit)");
             operation = scanner.nextLine();
             System.out.println("you selected " + operation);
 
@@ -51,6 +63,14 @@ public class Main {
 
             if (operation.equals("Review foundation")) {
                 reviewFoundation();
+            }
+
+            if (operation.equals("Save")) {
+                saveFoundation();
+            }
+
+            if (operation.equals("Load")) {
+                loadFoundation();
             }
 
             if (operation.equals("Quit")) {
@@ -278,6 +298,7 @@ public class Main {
     //          - add funds to the foundation
     //          - return to the main menu
     private void reviewFoundation() {
+        @SuppressWarnings("methodlength")
         String operations;
 
         while (true) {
@@ -319,6 +340,31 @@ public class Main {
         System.out.println("$" + funds + " has been add to the foundation");
         System.out.println("$" + ubcFoundation.getFundsAvailable() + " is now available to grant");
     }
+
+    // EFFECTS: saves the foundation to file
+    private void saveFoundation() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(ubcFoundation);
+            jsonWriter.close();
+            System.out.println("Saved file to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: load the foundation from file
+    private void loadFoundation() {
+        try {
+            ubcFoundation = jsonReader.read();
+            System.out.println("Loaded file " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file " + JSON_STORE);
+        }
+
+    }
+
 
     public static void main(String[] args) {
         new Main();
