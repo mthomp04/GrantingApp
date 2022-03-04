@@ -1,0 +1,66 @@
+{
+    "grants": [],
+    "fundsAvailable": 9029,
+    "charityList": [
+        {
+            "grants": [{
+                "grantName": "Katie",
+                "amountGranted": 1000,
+                "status": "AWARDED"
+            }],
+            "name": "Warren"
+        },
+        {
+            "grants": [
+                {
+                    "grantName": "Ramses",
+                    "amountGranted": 60,
+                    "status": "AWARDED"
+                },
+                {
+                    "grantName": "Life",
+                    "amountGranted": 800,
+                    "status": "REJECTED"
+                },
+                {
+                    "grantName": "Love",
+                    "amountGranted": 10,
+                    "status": "AWARDED"
+                }
+            ],
+            "name": "Matt"
+        },
+        {
+            "grants": [
+                {
+                    "grantName": "Ron",
+                    "amountGranted": 900,
+                    "status": "AWARDED"
+                },
+                {
+                    "grantName": "Bru",
+                    "amountGranted": 122222,
+                    "status": "REJECTED"
+                },
+                {
+                    "grantName": "Peace",
+                    "amountGranted": 1,
+                    "status": "AWARDED"
+                }
+            ],
+            "name": "TMH"
+        },
+        {
+            "grants": [],
+            "name": "Micah House"
+        },
+        {
+            "grants": [{
+                "grantName": "Peace",
+                "amountGranted": 1,
+                "status": "AWARDED"
+            }],
+            "name": "TMH"
+        }
+    ]
+}
