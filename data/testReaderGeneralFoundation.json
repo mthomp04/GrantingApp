@@ -1,0 +1,25 @@
+{
+  "grants": [],
+  "fundsAvailable": 1000,
+  "charityList": [
+    {
+      "grants": [],
+      "name": "Micah House"
+    },
+    {
+      "grants": [
+        {
+          "grantName": "Housing",
+          "amountGranted": 60,
+          "status": "AWARDED"
+        },
+        {
+          "grantName": "Employment",
+          "amountGranted": 800,
+          "status": "REJECTED"
+        }
+      ],
+      "name": "UBC Foundation"
+    }
+  ]
+}
