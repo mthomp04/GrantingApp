@@ -16,7 +16,7 @@ process and use similar software in my work.
  - As a user, I want to see the total amount given to an organization
  - As a user, I want to add funds to the foundation to grant
  - As a user, I want to see that grants awarded automatically subtract from total funds of the foundation
- - As a user, I want to be able to save a foundation with all inputted charities and associated grants
- - As a user, when I start the application, I want to be given the option to load a foundation (incl. charities, grants)
+ - As a user, I want to be able to save a foundation with its associated charities & grants
+ - As a user, I want to load a previously constructed foundations (w associated charities & grants)
 
 

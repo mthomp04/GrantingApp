@@ -1,12 +1,15 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 // represents an organization that has applied for funding
 // and has a name and list of grants applied for
-public class Charity {
+public class Charity implements Writable {
 
     private String name;
     protected List<Grant> grants;
@@ -80,12 +83,22 @@ public class Charity {
         }
     }
 
+    // getters
     public List<Grant> getGrants() {
         return grants;
     }
 
     public String getName() {
         return name;
+    }
+
+    // JSON
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("grants", grants);
+        return json;
     }
 
 }

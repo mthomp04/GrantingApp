@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 // represents a grant proposal
 public class Grant {
 
@@ -34,4 +36,12 @@ public class Grant {
         return status;
     }
 
+    // JSON
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("grantName", grantName);
+        json.put("status", status);
+        json.put("amountGranted", amountGranted);
+        return json;
+    }
 }

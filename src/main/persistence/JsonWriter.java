@@ -3,6 +3,7 @@ package persistence;
 import model.Foundation;
 import org.json.JSONObject;
 
+// Represents a writer that writes JSON representation of foundation to file
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -19,16 +20,16 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: opens writer; throws FileNotFoundException if destination file cannot
-    // be opened for writing
+    // EFFECTS: open writer; throws FileNotFoundException if destination file cannot
+    // be open for writing
     public void open() throws FileNotFoundException {
         writer = new PrintWriter(new File(destination));
     }
 
-    // MODIFIES: this
+    // MODIFIED: this
     // EFFECTS: writes JSON representation of workroom to file
-    public void write(Foundation fd) {
-        JSONObject json = fd.toJson();
+    public void write(Foundation foundation) {
+        JSONObject json = foundation.toJson();
         saveToFile(json.toString(TAB));
     }
 
@@ -44,4 +45,3 @@ public class JsonWriter {
         writer.print(json);
     }
 }
-
