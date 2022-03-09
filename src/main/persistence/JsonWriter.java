@@ -3,9 +3,12 @@ package persistence;
 import model.Foundation;
 import org.json.JSONObject;
 
-import java.io.*;
-
 // Represents a writer that writes JSON representation of foundation to file
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
+// Represents a writer that writes JSON representation of workroom to file
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;
