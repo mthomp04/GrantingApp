@@ -1,36 +1,12 @@
 {
     "grants": [],
-    "fundsAvailable": 691,
-    "charityList": [
-        {
-            "grants": [
-                {
-                    "grantName": "TOP",
-                    "amountGranted": 80,
-                    "status": "AWARDED"
-                },
-                {
-                    "grantName": "Run",
-                    "amountGranted": 900,
-                    "status": "REJECTED"
-                }
-            ],
-            "name": "Micah House"
-        },
-        {
-            "grants": [
-                {
-                    "grantName": "Ypu",
-                    "amountGranted": 19,
-                    "status": "AWARDED"
-                },
-                {
-                    "grantName": "TOP",
-                    "amountGranted": 200,
-                    "status": "AWARDED"
-                }
-            ],
-            "name": "TMH"
-        }
-    ]
+    "fundsAvailable": 900,
+    "charityList": [{
+        "grants": [{
+            "grantName": "LOL",
+            "amountGranted": 100,
+            "status": "AWARDED"
+        }],
+        "name": "James"
+    }]
 }

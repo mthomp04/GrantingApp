@@ -13,12 +13,15 @@ public class Charity implements Writable {
 
     private String name;
     protected List<Grant> grants;
+    int index;
 
     // EFFECTS: constructs an organization with a given name
     //          and without any associated grants
     public Charity(String name) {
         this.name = name;
         grants = new ArrayList<>();
+        index = 0;
+        index++;
     }
 
     // MODIFIES: this
@@ -91,6 +94,8 @@ public class Charity implements Writable {
     public String getName() {
         return name;
     }
+
+    public int getIndex() { return index;}
 
     // JSON
     @Override

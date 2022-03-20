@@ -26,6 +26,12 @@ public class Foundation implements Writable {
         charityList.add(charity);
     }
 
+    // MODIFIES: this
+    // EFFECTS: removes charity to the foundation
+    public void removeCharity(Charity charity) {
+        charityList.remove(charity);
+    }
+
     // REQUIRES: amount granted > 0 & there are sufficient funds in foundation
     // MODIFIED: this
     // EFFECTS: removes amount granted to organization from total funds available
