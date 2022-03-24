@@ -95,7 +95,9 @@ public class Charity implements Writable {
         return name;
     }
 
-    public int getIndex() { return index;}
+    public int getIndex() {
+        return index;
+    }
 
     // JSON
     @Override

@@ -3,11 +3,7 @@
     "fundsAvailable": 30,
     "charityList": [
         {
-            "grants": [{
-                "grantName": "lol",
-                "amountGranted": 40,
-                "status": "AWARDED"
-            }],
+            "grants": [],
             "name": "asa"
         },
         {
