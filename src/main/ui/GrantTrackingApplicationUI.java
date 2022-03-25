@@ -30,7 +30,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
     private static final String JSON_STORE = "./data/workroom.json";
 
     private JsonWriter jsonWriter;
-    private JPanel test;
+    private JPanel ubcImage;
     private JsonReader jsonReader;
     private CharityTable charityTableModel;
     private GrantTable grantTableModel;
@@ -50,8 +50,32 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
 
     public GrantTrackingApplicationUI() {
 
+        addTheme();
+        desktop = new JDesktopPane();
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+        desktop.addMouseListener(new DesktopFocusAction());
+        setContentPane(desktop);
+        setTitle("Grant Tracking Application");
+        setSize(WIDTH, HEIGHT);
+        addMenu();
+        addBackground();
+        addGrantWindow();
+        addCharityWindow();
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        centreOnScreen();
+        setVisible(true);
+    }
+
+    // EFFECTS: required method for the granttrackingapplicationui class
+    @Override
+    public void actionPerformed(ActionEvent e) {
+    }
+
+    // MODIFIES: this, desktop
+    // EFFECTS: adds nimbus theme to all components and if not supported sets to default java metal look and feel
+    private void addTheme() {
         try {
-            // Check if Nimbus is supported and get its classname
             for (UIManager.LookAndFeelInfo lafInfo : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(lafInfo.getName())) {
                     UIManager.setLookAndFeel(lafInfo.getClassName());
@@ -60,7 +84,6 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             }
         } catch (Exception e) {
             try {
-                // If Nimbus is not available, set to the default Java (metal) look and feel
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception e1) {
                 e1.printStackTrace();
@@ -68,44 +91,11 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         }
 
         UIManager.put("nimbusBase", Color.white);
+    }
 
-        desktop = new JDesktopPane();
-
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
-
-        desktop.addMouseListener(new DesktopFocusAction());
-        setContentPane(desktop);
-        setTitle("Grant Tracking Application");
-        setSize(WIDTH, HEIGHT);
-        addMenu();
-
-        background = new JInternalFrame();
-        background.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        background.pack();
-        desktop.add(background);
-        background.setVisible(true);
-
-        test = new ImagePanel();
-        test.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        background.add(test);
-
-        grantWindow = new JInternalFrame("Grants", true, true, true, false);
-        grantWindow.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT / 4));
-        grantWindow.setLayout(new FlowLayout(WIDTH, 0, 0));
-        grantWindow.setLocation(0, HEIGHT / 2);
-        grantTableModel = new GrantTable();
-        grantTable = new JTable(grantTableModel);
-        grantTable.setPreferredScrollableViewportSize(new Dimension(WIDTH - 200, HEIGHT / 3));
-        grantTable.setFillsViewportHeight(true);
-
-        grantWindowSP = new JScrollPane(grantTable);
-        grantWindow.add(grantTable);
-        grantWindow.add(grantWindowSP);
-        grantWindow.pack();
-        desktop.add(grantWindow);
-        grantWindow.setVisible(true);
-
+    // MODIFIES: this, desktop
+    // EFFECTS: adds charity window to the desktop with a working table
+    private void addCharityWindow() {
         charityWindow = new JInternalFrame("Charities", true, true, true, false);
 
         charityWindow.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT / 2));
@@ -123,15 +113,40 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         charityWindow.pack();
         desktop.add(charityWindow);
         charityWindow.setVisible(true);
-
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        centreOnScreen();
-        setVisible(true);
-
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    // MODIFIES: this, desktop
+    // EFFECTS: adds grant window to the desktop with a working table
+    private void addGrantWindow() {
+        grantWindow = new JInternalFrame("Grants", true, true, true, false);
+        grantWindow.setPreferredSize(new Dimension(WIDTH - 20, HEIGHT / 4));
+        grantWindow.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        grantWindow.setLocation(0, HEIGHT / 2);
+        grantTableModel = new GrantTable();
+        grantTable = new JTable(grantTableModel);
+        grantTable.setPreferredScrollableViewportSize(new Dimension(WIDTH - 200, HEIGHT / 3));
+        grantTable.setFillsViewportHeight(true);
+
+        grantWindowSP = new JScrollPane(grantTable);
+        grantWindow.add(grantTable);
+        grantWindow.add(grantWindowSP);
+        grantWindow.pack();
+        desktop.add(grantWindow);
+        grantWindow.setVisible(true);
+    }
+
+    // MODIFIES: this, desktop
+    // EFFECTS: adds ubc logo as a panel to the background of the application
+    private void addBackground() {
+        background = new JInternalFrame();
+        background.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        background.pack();
+        desktop.add(background);
+        background.setVisible(true);
+
+        ubcImage = new ImagePanel();
+        ubcImage.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        background.add(ubcImage);
     }
 
     public static class ImagePanel extends JPanel {
@@ -139,7 +154,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
 
         public ImagePanel() {
             try {
-                image = ImageIO.read(new File("C:\\CPSC210\\project_k6t8k\\data\\tobs.jpg"));
+                image = ImageIO.read(new File("C:\\CPSC210\\project_k6t8k\\data\\ubc.png"));
             } catch (IOException e) {
                 System.out.println("issues");
             }
@@ -154,8 +169,10 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
     }
 
 
+    // MODIFIES: this, charitywindow
+    // EFFECTS: creates table for charities
     class CharityTable extends AbstractTableModel {
-        ArrayList<String> cols = new ArrayList<String>();
+        ArrayList<String> cols = new ArrayList<>();
 
         public CharityTable() {
             foundation = new Foundation();
@@ -196,9 +213,10 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         }
     }
 
-
+    // MODIFIES: this, grantwindow
+    // EFFECTS: creates table for grants
     class GrantTable extends AbstractTableModel {
-        ArrayList<String> cols = new ArrayList<String>();
+        ArrayList<String> cols = new ArrayList<>();
 
         public GrantTable() {
             cols.add("Name");
@@ -263,7 +281,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
 
     }
 
-    // EFFECTS: adds the menu with add charity, add grant, load, save, reports, and review foundation tabs
+    // EFFECTS: adds the menu with add charity, add grant, load, save, funds, and review foundation tabs
     private void addMenu() {
         JMenuBar menuBar = new JMenuBar();
         JMenu charities = new JMenu("Charity");
@@ -296,20 +314,14 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                 KeyStroke.getKeyStroke("control S"));
         addMenuItem(settings, new LoadAction(),
                 KeyStroke.getKeyStroke("control L"));
-        addMenuItem(settings, new DeleteAllAction(),
+        addMenuItem(settings, new DeleteAllCharitiesAction(),
                 KeyStroke.getKeyStroke("control D"));
         menuBar.add(settings);
 
         setJMenuBar(menuBar);
     }
 
-    /**
-     * Adds an item with given handler to the given menu
-     *
-     * @param theMenu     menu to which new item is added
-     * @param action      handler for new menu item
-     * @param accelerator keystroke accelerator for this menu item
-     */
+    // EFFECTS: adds an item with given handler to the given menu
     private void addMenuItem(JMenu theMenu, AbstractAction action, KeyStroke accelerator) {
         JMenuItem menuItem = new JMenuItem(action);
         menuItem.setMnemonic((menuItem.getText().charAt(0)));
@@ -317,15 +329,15 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         theMenu.add(menuItem);
     }
 
-    /**
-     * Helper to centre main application window on desktop
-     */
+    // EFFECTS: helper to centre main application window on desktop
     private void centreOnScreen() {
         int width = Toolkit.getDefaultToolkit().getScreenSize().width;
         int height = Toolkit.getDefaultToolkit().getScreenSize().height;
         setLocation((width - getWidth()) / 2, (height - getHeight()) / 2);
     }
 
+    // MODIFIES: this, foundation
+    // EFFECTS: action to allow user to add funds to the foundation
     private class AddFundsAction extends AbstractAction {
 
         AddFundsAction() {
@@ -340,17 +352,17 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                     JOptionPane.QUESTION_MESSAGE);
 
             if (addFunds != null && Integer.parseInt(addFunds) < 0) {
-
                 JOptionPane.showMessageDialog(null, "You cannot have a negative fund balance",
                         "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 foundation.addOrRemoveFunds(Integer.parseInt(addFunds));
                 JOptionPane.showMessageDialog(null, "$"
                         + addFunds + " has been added to your foundation");
-            } //TODO
+            }
         }
     }
 
+    // EFFECTS: action to allow user to get remaining funds available to grant
     private class GetFundsAvailable extends AbstractAction {
 
         GetFundsAvailable() {
@@ -364,6 +376,8 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: this, foundation
+    // EFFECTS: action to allow user to add charity to the foundation
     private class AddCharityAction extends AbstractAction {
 
         AddCharityAction() {
@@ -385,13 +399,11 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                 rowIndex++;
                 charityTableModel.fireTableDataChanged();
             }
-//            } catch (DuplicateCharityException e) {
-//                JOptionPane.showMessageDialog(null, e.getMessage(), "System Error",
-//                        JOptionPane.ERROR_MESSAGE);
-//            }
         }
     }
 
+    // MODIFIES: this, foundation
+    // EFFECTS: action to allow user to remove charity from the foundation
     private class RemoveCharityAction extends AbstractAction {
 
         RemoveCharityAction() {
@@ -419,7 +431,6 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                         JOptionPane.QUESTION_MESSAGE);
 
                 selectedCharity = cb.getSelectedItem().toString();
-//            try {
                 if (selectedCharity != null) {
                     Charity c = new Charity(selectedCharity);
                     for (Charity c2 : foundation.getCharityList()) {
@@ -432,27 +443,35 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                 rowIndex--;
                 charityTableModel.fireTableDataChanged();
             }
-//            } catch (DuplicateCharityException e) {
-//                JOptionPane.showMessageDialog(null, e.getMessage(), "System Error",
-//                        JOptionPane.ERROR_MESSAGE);
-//            }
         }
     }
 
+    // EFFECTS: delete all charities and grants in the charity
+    private class DeleteAllCharitiesAction extends AbstractAction {
 
-    /**
-     * Represents action to be taken when user clicks desktop
-     * to switch focus. (Needed for key handling.)
-     */
+        DeleteAllCharitiesAction() {
+            super("Delete");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            foundation.getCharityList().clear();
+            rowIndex = 0;
+            foundation.addOrRemoveFunds(-foundation.getFundsAvailable());
+            charityTableModel.fireTableDataChanged();
+        }
+    }
+
+    // EFFECTS: represents action to be taken when user clicks desktop to switch focus. (Needed for key handling.)
     private class DesktopFocusAction extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
             GrantTrackingApplicationUI.this.requestFocusInWindow();
         }
-
     }
 
-
+    // MODIFIES: this, charity
+    // EFFECTS: action to allow user to add a grant to the given charity
     private class AddGrantAction extends AbstractAction {
         String skip = ""; //todo is there a better way to do this?
 
@@ -493,15 +512,12 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
 
                 JOptionPane.showMessageDialog(null, grantPanel, "Add Grant", JOptionPane.QUESTION_MESSAGE);
 
-                // try { //TODO get rid of extra box
-                // TODO throw error is not given int or statusSelected
-
                 String grantNameString = grantName.getText();
                 String grantAmountString = grantAmount.getText();
-                int grantAmountInt = Integer.parseInt(grantAmountString); // todo non-int exception?
+                int grantAmountInt = Integer.parseInt(grantAmountString);
 
                 Grant.Status statusSelected = (Grant.Status) cb.getSelectedItem();
-                String charitySelected = (String) cb2.getSelectedItem().toString();
+                String charitySelected = cb2.getSelectedItem().toString();
 
                 if (statusSelected == Grant.Status.AWARDED
                         && foundation.getFundsAvailable() - grantAmountInt < 0) {
@@ -510,8 +526,6 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                             "Insufficient Funds", JOptionPane.ERROR_MESSAGE);
 
                     skip = "yes";
-
-                    // todo is there a way to have the add funds action pop up automatically
 
                 } else if (foundation.getFundsAvailable() - grantAmountInt >= 0 && grantPanel != null) {
 
@@ -532,17 +546,13 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                     }
                 }
                 charityTableModel.fireTableDataChanged();
-                // todo issue with rejected grants
 
             }
-//            } catch (DuplicateGrantException e) {
-//                JOptionPane.showMessageDialog(null, e.getMessage(), "System Error",
-//                        JOptionPane.ERROR_MESSAGE);
-//            }
-
         }
     }
 
+    // MODIFIES: this, charity
+    // EFFECTS: action to allow user to remove a grant from the given charity
     public class RemoveGrantAction extends AbstractAction {
 
         RemoveGrantAction() {
@@ -649,23 +659,22 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECTS: identifies where a user has clicked on the charity table
     public class CharityTableListener extends MouseAdapter {
         String charityName;
 
         public void mouseClicked(MouseEvent e) {
             Point point = e.getPoint();
 
-            if (e != null) {
-                int row = charityTable.rowAtPoint(point);
-                charityName = charityTable.getValueAt(row, 0).toString();
+            int row = charityTable.rowAtPoint(point);
+            charityName = charityTable.getValueAt(row, 0).toString();
 
-                for (Charity c : foundation.getCharityList()) {
-                    if (c.getName().equals(charityName)) {
-                        charity = c;
-                    }
+            for (Charity c : foundation.getCharityList()) {
+                if (c.getName().equals(charityName)) {
+                    charity = c;
                 }
-                grantTableModel.fireTableDataChanged();
             }
+            grantTableModel.fireTableDataChanged();
         }
     }
 
@@ -707,22 +716,6 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "There was an error with loading the file "
                         + JSON_STORE);
             }
-        }
-    }
-
-    // EFFECTS: delete all charities and grants in the charity
-    private class DeleteAllAction extends AbstractAction {
-
-        DeleteAllAction() {
-            super("Delete");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent evt) {
-            foundation.getCharityList().clear();
-            rowIndex = 0;
-            foundation.addOrRemoveFunds(-foundation.getFundsAvailable());
-            charityTableModel.fireTableDataChanged();
         }
     }
 
