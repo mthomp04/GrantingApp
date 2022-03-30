@@ -1,6 +1,7 @@
 package ui;
 
 import model.Charity;
+import model.EventLog;
 import model.Foundation;
 import model.Grant;
 import persistence.JsonReader;
@@ -10,10 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,6 +61,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         addGrantWindow();
         addCharityWindow();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new DesktopCloseListener());
         centreOnScreen();
         setVisible(true);
     }
@@ -224,6 +223,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             cols.add("Amount Awarded");
         }
 
+        @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
         @Override
         public Object getValueAt(int r, int c) {
             switch (c) {
@@ -282,6 +282,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
     }
 
     // EFFECTS: adds the menu with add charity, add grant, load, save, funds, and review foundation tabs
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void addMenu() {
         JMenuBar menuBar = new JMenuBar();
         JMenu charities = new JMenu("Charity");
@@ -320,6 +321,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
 
         setJMenuBar(menuBar);
     }
+
 
     // EFFECTS: adds an item with given handler to the given menu
     private void addMenuItem(JMenu theMenu, AbstractAction action, KeyStroke accelerator) {
@@ -410,6 +412,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             super("Remove Charity");
         }
 
+        @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
         @Override
         public void actionPerformed(ActionEvent evt) {
             ArrayList<String> charityNames = new ArrayList<>();
@@ -479,6 +482,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             super("Add Grant");
         }
 
+        @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
         @Override
         public void actionPerformed(ActionEvent evt) {
             JTextField grantName = new JTextField();
@@ -559,6 +563,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             super("Remove Grant");
         }
 
+        @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
         @Override
         public void actionPerformed(ActionEvent evt) {
             ArrayList<String> grantNames = new ArrayList<>();
@@ -566,10 +571,9 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             String selectedCharity;
             String selectedGrant;
             JPanel removeGrantPanel = new JPanel();
-            JLabel cbLabel;
-            JLabel cb2Label;
             JComboBox cb;
-            JComboBox cb2;
+            JLabel cbLabel = new JLabel("Select grant to remove");
+            JLabel cbLabel2 = new JLabel("Select charity to remove");
 
             new CharityTableListener();
 
@@ -583,24 +587,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
 
             } else if (charity != null) {
 
-                for (Grant g : charity.getGrants()) {
-                    grantNames.add(g.getGrantName());
-                }
-
-                cb = new JComboBox(grantNames.toArray());
-
-                JOptionPane.showMessageDialog(null, cb, "Remove Grant",
-                        JOptionPane.QUESTION_MESSAGE);
-
-                selectedGrant = cb.getSelectedItem().toString();
-
-
-                if (selectedGrant != null) {
-                    charity.removeGrant(selectedGrant);
-                }
-
-                grantTableModel.fireTableDataChanged();
-                charityTableModel.fireTableDataChanged();
+                removeGrantMouseSelection(grantNames, removeGrantPanel, cbLabel);
 
             } else {
 
@@ -613,49 +600,73 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                                 "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
 
-                        cb = new JComboBox(charityNames.toArray());
-                        cbLabel = new JLabel("Select Charity");
-
-                        removeGrantPanel.add(cbLabel);
-                        removeGrantPanel.add(cb);
-
-
-                        JOptionPane.showMessageDialog(null, removeGrantPanel, "Remove Grant",
-                                JOptionPane.QUESTION_MESSAGE);
-
-                        selectedCharity = cb.getSelectedItem().toString();
-
-                        for (Charity c1 : foundation.getCharityList()) {
-                            if (c1.getName().equals(selectedCharity)) {
-                                charity = c1;
-                            }
-                        }
-
-                        for (Grant g : charity.getGrants()) {
-                            grantNames.add(g.getGrantName());
-                        }
-
-                        cb2 = new JComboBox(grantNames.toArray());
-                        cb2Label = new JLabel("Select Grant");
-                        removeGrantPanel.remove(cbLabel);
-                        removeGrantPanel.remove(cb);
-                        removeGrantPanel.add(cb2Label);
-                        removeGrantPanel.add(cb2);
-
-                        JOptionPane.showMessageDialog(null, removeGrantPanel, "Remove Grant",
-                                JOptionPane.QUESTION_MESSAGE);
-
-                        selectedGrant = cb2.getSelectedItem().toString();
-
-                        if (selectedGrant != null) {
-                            charity.removeGrant(selectedGrant);
-                        }
-
-                        grantTableModel.fireTableDataChanged();
-                        charityTableModel.fireTableDataChanged();
+                        removeGrantNoMouseSelection(grantNames, charityNames);
                     }
                 }
             }
+        }
+
+        // EFFECTS: removes a grant from a charity in the event a charity has been initially selected in the
+        //          charitytable
+        private void removeGrantMouseSelection(ArrayList<String> grantNames, JPanel removeGrantPanel, JLabel cbLabel) {
+            String selectedGrant;
+            JComboBox cb;
+            for (Grant g : charity.getGrants()) {
+                grantNames.add(g.getGrantName());
+            }
+
+            cb = new JComboBox(grantNames.toArray());
+            removeGrantPanel.add(cbLabel);
+            removeGrantPanel.add(cb);
+
+            JOptionPane.showMessageDialog(null, removeGrantPanel, "Remove Grant",
+                    JOptionPane.QUESTION_MESSAGE);
+
+            selectedGrant = cb.getSelectedItem().toString();
+
+            if (selectedGrant != null) {
+                charity.removeGrant(selectedGrant);
+            }
+
+            grantTableModel.fireTableDataChanged();
+            charityTableModel.fireTableDataChanged();
+        }
+
+        // EFFECTS: removes a grant from a charity in the event that no charity has been initially selected in the
+        //          charitytable
+        private void removeGrantNoMouseSelection(ArrayList<String> grantNames, ArrayList<String> charityNames) {
+            String selectedGrant;
+            String selectedCharity;
+            JComboBox cb2 = new JComboBox(charityNames.toArray());
+
+            JOptionPane.showMessageDialog(null, cb2, "Select Charity",
+                    JOptionPane.QUESTION_MESSAGE);
+
+            selectedCharity = cb2.getSelectedItem().toString();
+
+            for (Charity c1 : foundation.getCharityList()) {
+                if (c1.getName().equals(selectedCharity)) {
+                    charity = c1;
+                }
+            }
+
+            for (Grant g : charity.getGrants()) {
+                grantNames.add(g.getGrantName());
+            }
+
+            JComboBox cb3 = new JComboBox(grantNames.toArray());
+
+            JOptionPane.showMessageDialog(null, cb3, "Remove Grant",
+                    JOptionPane.QUESTION_MESSAGE);
+
+            selectedGrant = cb3.getSelectedItem().toString();
+
+            if (selectedGrant != null) {
+                charity.removeGrant(selectedGrant);
+            }
+
+            grantTableModel.fireTableDataChanged();
+            charityTableModel.fireTableDataChanged();
         }
     }
 
@@ -723,4 +734,46 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
     public static void main(String[] args) {
         new GrantTrackingApplicationUI();
     }
+
+    private class DesktopCloseListener extends JDesktopPane implements WindowListener {
+
+        @Override
+        public void windowOpened(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            if (desktop.isDisplayable()) {
+                charityWindow.dispose();
+                grantWindow.dispose();
+                desktop.setVisible(false);
+                foundation.printLog(EventLog.getInstance());
+            }
+        }
+
+        @Override
+        public void windowClosed(WindowEvent e) {
+        }
+
+        @Override
+        public void windowIconified(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowDeiconified(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowActivated(WindowEvent e) {
+
+        }
+
+        @Override
+        public void windowDeactivated(WindowEvent e) {
+        }
+    }
 }
+

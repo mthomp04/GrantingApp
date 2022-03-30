@@ -13,21 +13,20 @@ public class Charity implements Writable {
 
     private String name;
     protected List<Grant> grants;
-    int index;
 
     // EFFECTS: constructs an organization with a given name
     //          and without any associated grants
     public Charity(String name) {
         this.name = name;
         grants = new ArrayList<>();
-        index = 0;
-        index++;
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a grant to an applying organization
+    // EFFECTS: adds a grant to an applying organization and adds event to log
     public void addGrant(Grant grant) {
         grants.add(grant);
+        EventLog.getInstance().logEvent(new Event("Grant " + grant.getGrantName()
+                + " was added to charity " + name));
     }
 
     // EFFECTS: produces the total amount of funds awarded to a given charity
@@ -73,7 +72,7 @@ public class Charity implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes a grant from the list of associated grant
+    // EFFECTS: removes a grant from the list of associated grant and adds event to log
     public void removeGrant(String grantName) {
         Iterator<Grant> itr = grants.iterator();
 
@@ -82,6 +81,8 @@ public class Charity implements Writable {
 
             if (grant.getGrantName().equals(grantName)) {
                 itr.remove();
+                EventLog.getInstance().logEvent(new Event("Grant " + grant.getGrantName()
+                        + " was removed from charity " + name));
             }
         }
     }
@@ -93,10 +94,6 @@ public class Charity implements Writable {
 
     public String getName() {
         return name;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     // JSON

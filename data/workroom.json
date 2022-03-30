@@ -1,11 +1,11 @@
 {
     "grants": [],
-    "fundsAvailable": 30,
+    "fundsAvailable": 25,
     "charityList": [
         {
             "grants": [{
-                "grantName": "io",
-                "amountGranted": 10,
+                "grantName": "o",
+                "amountGranted": 5,
                 "status": "AWARDED"
             }],
             "name": "asa"

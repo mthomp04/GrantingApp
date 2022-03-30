@@ -19,4 +19,20 @@ process and use similar software in my work.
  - As a user, I want to be able to save a foundation with its associated charities & grants
  - As a user, I want to load a previously constructed foundations (w associated charities & grants)
 
+**Phase 4: Task 2**
+
+Sun Mar 27 18:54:59 EDT 2022
+The charity lol was added to the foundation.
+
+Sun Mar 27 18:55:01 EDT 2022
+The charity pop was added to the foundation.
+
+Sun Mar 27 18:55:13 EDT 2022
+Grant oo was added to charity lol
+
+Sun Mar 27 18:55:18 EDT 2022
+Grant oo was removed from charity lol
+
+Sun Mar 27 18:55:22 EDT 2022
+The charity lol was removed from the foundation
 
