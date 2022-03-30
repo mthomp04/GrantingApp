@@ -285,13 +285,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
     @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void addMenu() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu charities = new JMenu("Charity");
-        charities.setMnemonic('C');
-        addMenuItem(charities, new AddCharityAction(),
-                KeyStroke.getKeyStroke("control C"));
-        menuBar.add(charities);
-        addMenuItem(charities, new RemoveCharityAction(),
-                KeyStroke.getKeyStroke("control R"));
+        JMenu charities = addCharityMenuBar(menuBar);
 
         JMenu grants = new JMenu("Grant");
         charities.setMnemonic('G');
@@ -320,6 +314,18 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         menuBar.add(settings);
 
         setJMenuBar(menuBar);
+    }
+
+    // EFFECTS: adds charity actions to menu bar
+    private JMenu addCharityMenuBar(JMenuBar menuBar) {
+        JMenu charities = new JMenu("Charity");
+        charities.setMnemonic('C');
+        addMenuItem(charities, new AddCharityAction(),
+                KeyStroke.getKeyStroke("control C"));
+        menuBar.add(charities);
+        addMenuItem(charities, new RemoveCharityAction(),
+                KeyStroke.getKeyStroke("control R"));
+        return charities;
     }
 
 
@@ -405,7 +411,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this, foundation
-    // EFFECTS: action to allow user to remove charity from the foundation
+    // EFFECTS: action to allow user to remove charity from the foundation or provides error if not possible
     private class RemoveCharityAction extends AbstractAction {
 
         RemoveCharityAction() {
@@ -416,7 +422,6 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent evt) {
             ArrayList<String> charityNames = new ArrayList<>();
-            String selectedCharity;
 
             if (foundation.getCharityList().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please add a charity", "Error",
@@ -427,25 +432,31 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                     charityNames.add(c.getName());
                 }
 
-                JComboBox cb = new JComboBox(charityNames.toArray());
+                removeCharity(charityNames);
+            }
+        }
+
+        // EFFECTS: removes charity from the foundation
+        private void removeCharity(ArrayList<String> charityNames) {
+            String selectedCharity;
+            JComboBox cb = new JComboBox(charityNames.toArray());
 
 
-                JOptionPane.showMessageDialog(null, cb, "Remove Charity",
-                        JOptionPane.QUESTION_MESSAGE);
+            JOptionPane.showMessageDialog(null, cb, "Remove Charity",
+                    JOptionPane.QUESTION_MESSAGE);
 
-                selectedCharity = cb.getSelectedItem().toString();
-                if (selectedCharity != null) {
-                    Charity c = new Charity(selectedCharity);
-                    for (Charity c2 : foundation.getCharityList()) {
-                        if (c2.getName().equals(selectedCharity)) {
-                            charity = c2;
-                        }
+            selectedCharity = cb.getSelectedItem().toString();
+            if (selectedCharity != null) {
+                Charity c = new Charity(selectedCharity);
+                for (Charity c2 : foundation.getCharityList()) {
+                    if (c2.getName().equals(selectedCharity)) {
+                        charity = c2;
                     }
                 }
-                foundation.removeCharity(charity);
-                rowIndex--;
-                charityTableModel.fireTableDataChanged();
             }
+            foundation.removeCharity(charity);
+            rowIndex--;
+            charityTableModel.fireTableDataChanged();
         }
     }
 
