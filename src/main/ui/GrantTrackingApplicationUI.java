@@ -634,7 +634,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             }
         }
 
-        // EFFECTS: shows error if there are no grants for given charity to remove. Otherwise calls
+        // EFFECTS: shows error if there are no grants for given charity to remove. Otherwise, calls
         //          removeGrantNoMouseSelection method
         private void noGrantsError(ArrayList<String> grantNames, ArrayList<String> charityNames) {
             for (Charity c : foundation.getCharityList()) {

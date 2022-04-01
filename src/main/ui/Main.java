@@ -292,10 +292,10 @@ public class Main {
         String grantName = scanner.nextLine();
 
 
-            passCharity.removeGrant(grantName);
-            System.out.println(grantName + " has been removed from ");
-            System.out.println("There are no grants associated with this charity");
-        }
+        passCharity.removeGrant(grantName);
+        System.out.println(grantName + " has been removed from ");
+        System.out.println("There are no grants associated with this charity");
+    }
 
     // EFFECTS: prints secondary menu to review information about the foundation including:
     //          - a list of all charities & the total amount of funding received
