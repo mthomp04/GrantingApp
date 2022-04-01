@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
+// Console interface for Grant Tracking Application
 public class Main {
     private static final String JSON_STORE = "./data/workroom.json";
     private Foundation ubcFoundation;

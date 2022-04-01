@@ -1,9 +1,10 @@
 package model;
 
 import org.json.JSONObject;
+import persistence.Writable;
 
 // represents a grant proposal
-public class Grant {
+public class Grant implements Writable {
 
     public enum Status {
         AWARDED,

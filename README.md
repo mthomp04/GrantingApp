@@ -36,3 +36,9 @@ Grant oo was removed from charity lol
 Sun Mar 27 18:55:22 EDT 2022
 The charity lol was removed from the foundation
 
+**Phase 4: Task 3**
+- There were a few repetitive methods where I had to find a grant or charity by getting their name. By making this its 
+  own method I could call it instead and reduce code redundancy
+- Make the CharityTable and GrantTable classes external classes and have an interface class called Tables
+- There is a Charity and Grant field in the GrantTrackingApplicationUI model which are fields to temporarily story the 
+  charity or grant that has been constructed. I'm not sure how I'd solve this, however. M

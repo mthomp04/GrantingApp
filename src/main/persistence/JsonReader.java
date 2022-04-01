@@ -1,7 +1,5 @@
 package persistence;
 
-// Represents a reader that reads foundation from JSON data stored in file
-
 import model.Charity;
 import model.Foundation;
 import model.Grant;
@@ -14,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+// Represents a reader that reads foundation from JSON data stored in file
 public class JsonReader {
     private String source;
 

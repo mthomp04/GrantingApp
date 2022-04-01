@@ -1,22 +1,14 @@
 {
     "grants": [],
-    "fundsAvailable": 25,
+    "fundsAvailable": 40,
     "charityList": [
         {
-            "grants": [{
-                "grantName": "o",
-                "amountGranted": 5,
-                "status": "AWARDED"
-            }],
-            "name": "asa"
+            "grants": [],
+            "name": "Andrew"
         },
         {
             "grants": [],
-            "name": "sds"
-        },
-        {
-            "grants": [],
-            "name": "opo"
+            "name": "James"
         }
     ]
 }

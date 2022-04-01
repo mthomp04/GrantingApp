@@ -9,7 +9,7 @@ import java.util.List;
 
 // represents a foundation which has a list of charities to which it can give funds
 // includes a total amount of funds available to be distributed to charities through grants
-public class Foundation implements Writable {
+public class Foundation implements Writable, LogPrinter {
     private List<Charity> charityList;
     private List<Grant> grants;
     protected int fundsAvailable;
@@ -21,15 +21,19 @@ public class Foundation implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds charity to the foundation
+    // EFFECTS: adds charity to the foundation and adds event to log
     public void addCharity(Charity charity) {
         charityList.add(charity);
+        EventLog.getInstance().logEvent(new Event("The charity " + charity.getName()
+                + " was added to the foundation."));
     }
 
     // MODIFIES: this
-    // EFFECTS: removes charity to the foundation
+    // EFFECTS: removes charity to the foundation and adds event to log
     public void removeCharity(Charity charity) {
         charityList.remove(charity);
+        EventLog.getInstance().logEvent(new Event("The charity " + charity.getName()
+                + " was removed from the foundation"));
     }
 
     // REQUIRES: amount granted > 0 & there are sufficient funds in foundation
@@ -106,7 +110,7 @@ public class Foundation implements Writable {
             jsonArray.put(c.toJson());
         }
 
-        return  jsonArray;
+        return jsonArray;
     }
 
     // EFFECTS: returns grants in this foundation as a JSON array
@@ -117,6 +121,17 @@ public class Foundation implements Writable {
             jsonArray.put(g.toJson());
         }
 
-        return  jsonArray;
+        return jsonArray;
+    }
+
+    //EFFECTS: prints all logged events in the console
+    @Override
+    public void printLog(EventLog el) {
+        for (Event next : el) {
+            System.out.println(next.toString() + "\n");
+        }
     }
 }
+
+
+
