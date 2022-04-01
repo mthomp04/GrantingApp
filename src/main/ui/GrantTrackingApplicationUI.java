@@ -148,6 +148,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         background.add(ubcImage);
     }
 
+    //EFFECTS: adds image to the background panel
     public static class ImagePanel extends JPanel {
         BufferedImage image;
 
@@ -531,14 +532,14 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
                 skip = "yes";
 
             } else {
-                addCharity(grantName, grantAmount, cb, cb2);
+                addGrant(grantName, grantAmount, cb, cb2);
 
             }
         }
 
-        
-        private void addCharity(JTextField grantName, JTextField grantAmount,
-                                JComboBox<Grant.Status> cb, JComboBox cb2) {
+        // EFFECTS: constructs grant to add to a given charity
+        private void addGrant(JTextField grantName, JTextField grantAmount,
+                              JComboBox<Grant.Status> cb, JComboBox cb2) {
 
             constructAddCharityPopUpWindow(grantName, grantAmount, cb, cb2);
             String grantNameString = grantName.getText();
@@ -551,7 +552,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             if (statusSelected == Grant.Status.AWARDED
                     && foundation.getFundsAvailable() - grantAmountInt < 0) {
 
-                insufficientFundsAddCharity("Please add funding before you add grants", "Insufficient Funds");
+                insufficientFundsAddGrant("Please add funding before you add grants", "Insufficient Funds");
 
             } else if (foundation.getFundsAvailable() - grantAmountInt >= 0 && grantPanel != null) {
                 grant = new Grant(grantNameString, statusSelected, grantAmountInt);
@@ -569,13 +570,15 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             charityTableModel.fireTableDataChanged();
         }
 
-        private void insufficientFundsAddCharity(String s, String s2) {
+        // EFFECTS: shows error pop up window if there are insufficient funds to add a given grant
+        private void insufficientFundsAddGrant(String s, String s2) {
             JOptionPane.showMessageDialog(null, s,
                     s2, JOptionPane.ERROR_MESSAGE);
 
             skip = "yes";
         }
 
+        // EFFECTS: creates add charity pop up window
         private void constructAddCharityPopUpWindow(JTextField grantName, JTextField grantAmount,
                                                     JComboBox<Grant.Status> cb, JComboBox cb2) {
             grantPanel = new JPanel(new GridLayout(4, 0, 0, 0));
@@ -631,7 +634,8 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             }
         }
 
-        // EFFECTS:
+        // EFFECTS: shows error if there are no grants for given charity to remove. Otherwise calls
+        //          removeGrantNoMouseSelection method
         private void noGrantsError(ArrayList<String> grantNames, ArrayList<String> charityNames) {
             for (Charity c : foundation.getCharityList()) {
                 if (!c.getGrants().isEmpty()) {
