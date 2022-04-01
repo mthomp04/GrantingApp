@@ -49,8 +49,8 @@ public class Event {
         } else {
             Event otherEvent = (Event) other;
 
-            return (this.dateLogged.equals(otherEvent.dateLogged) &&
-                    this.description.equals(otherEvent.description));
+            return (this.dateLogged.equals(otherEvent.dateLogged)
+                    && this.description.equals(otherEvent.description));
         }
     }
 
