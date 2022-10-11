@@ -9,7 +9,7 @@ import java.util.List;
 
 // represents an organization that has applied for funding
 // and has a name and list of grants applied for
-public class Charity implements Writable {
+public class Charity implements Writable, Iterable<Grant> {
 
     private String name;
     protected List<Grant> grants;
@@ -74,17 +74,7 @@ public class Charity implements Writable {
     // MODIFIES: this
     // EFFECTS: removes a grant from the list of associated grant and adds event to log
     public void removeGrant(String grantName) {
-        Iterator<Grant> itr = grants.iterator();
-
-        while (itr.hasNext()) {
-            Grant grant = itr.next();
-
-            if (grant.getGrantName().equals(grantName)) {
-                itr.remove();
-                EventLog.getInstance().logEvent(new Event("Grant " + grant.getGrantName()
-                        + " was removed from charity " + name));
-            }
-        }
+        grants.removeIf(grant -> grant.getGrantName().equals(grantName));
     }
 
     // getters
@@ -105,4 +95,8 @@ public class Charity implements Writable {
         return json;
     }
 
+    @Override
+    public Iterator<Grant> iterator() {
+        return grants.iterator();
+    }
 }

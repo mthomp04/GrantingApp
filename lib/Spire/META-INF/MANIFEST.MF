@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Extension-Name: spire.xls
+Implementation-Title: spire.xls for java
+Implementation-Version: 5.3.1
+Implementation-Vendor: E-iceblue Co., Ltd
+Implementation-Vendor-Id: com.spire
+Implementation-URL: https://www.e-iceblue.com

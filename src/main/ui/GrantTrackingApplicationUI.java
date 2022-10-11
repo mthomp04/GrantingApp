@@ -7,13 +7,10 @@ import model.Grant;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +25,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
     private static final String JSON_STORE = "./data/workroom.json";
 
     private JsonWriter jsonWriter;
-    private JPanel ubcImage;
+    //private JPanel ubcImage;
     private JsonReader jsonReader;
     private CharityTable charityTableModel;
     private GrantTable grantTableModel;
@@ -143,11 +140,12 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
         desktop.add(background);
         background.setVisible(true);
 
-        ubcImage = new ImagePanel();
-        ubcImage.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        background.add(ubcImage);
+//        ubcImage = new ImagePanel();
+//        ubcImage.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+//        background.add(ubcImage);
     }
 
+    /*
     //EFFECTS: adds image to the background panel
     public static class ImagePanel extends JPanel {
         BufferedImage image;
@@ -167,7 +165,7 @@ class GrantTrackingApplicationUI extends JFrame implements ActionListener {
             repaint();
         }
     }
-
+*/
 
     // MODIFIES: this, charitywindow
     // EFFECTS: creates table for charities
